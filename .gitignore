@@ -1,0 +1,5 @@
+.idea
+venv
+Jantrik
+etalon/settings/local.py
+etalon/etalon_db.sqlite3
