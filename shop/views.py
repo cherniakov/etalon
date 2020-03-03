@@ -3,4 +3,7 @@ from django.http import HttpResponse
 
 
 def index(request):
-    return render(request, 'index.html')
+    data = {
+        'title': 'Главная страница'
+    }
+    return render(request, 'index.html', data)
