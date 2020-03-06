@@ -27,13 +27,14 @@ class Brand(models.Model):
 
 class Product(models.Model):
     """Товар"""
-    article = models.CharField("Артикул", max_length=15)
+    article = models.CharField("Артикул", max_length=15, unique=True)
     name = models.CharField("Наименование", max_length=150)
+    model_product = models.CharField("Модель/Серия", max_length=20, null=True)
     brand = models.ForeignKey(Brand, verbose_name="Поизводитель", on_delete=models.SET_NULL, null=True)
     category = models.ForeignKey(Category, verbose_name="Категория", on_delete=models.SET_NULL, null=True)
-    description_bf = models.TextField("Краткое описание")
+    description_bf = models.TextField("Краткое описание", max_length=500)
     price = models.DecimalField("Цена", max_digits=12, decimal_places=2)
-    poster = models.ImageField("Изображение", upload_to="product_img/")
+    poster = models.ImageField("Изображение поста", upload_to="product_img/")
     publication = models.BooleanField("Публиковать", default=False)
 
     def __str__(self):
