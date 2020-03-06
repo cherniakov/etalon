@@ -7,7 +7,6 @@
 {#    <link rel="stylesheet" href="{% static 'shop/main.css' %}">#}
     <link rel="stylesheet"
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" >
-
 </head>
 <body>
 <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-5 bg-white border-bottom shadow-sm">
@@ -21,5 +20,10 @@
 </div>
     {% block content %}
     {% endblock content%}
+    {% block footer %}
+    {% endblock footer%}
+
+
+
 </body>
 </html>
