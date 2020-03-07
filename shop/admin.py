@@ -24,6 +24,13 @@ class ParametersInline(admin.TabularInline):
 class ImagesProductInline(admin.TabularInline):
     model = ImagesProduct
     extra = 0
+    readonly_fields = ("get_image", )
+
+    def get_image(self, obj):
+        print(obj.image.url)
+        return mark_safe(f'<img src={obj.image.url} width="50" height="60"')
+
+    get_image.short_description = "Изображение"
 
 
 @admin.register(Product)
@@ -57,15 +64,15 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(ImagesProduct)
 class ImagesProductAdmin(admin.ModelAdmin):
-    list_display = ("id", "product", "name", "image")
+    list_display = ("id", "product", "name", "get_image")
     list_display_links = ("product",)
     search_fields = ("product__name", "name")
-    # readonly_fields = ("get_image",)
+    readonly_fields = ("get_image",)
 
-    # def get_image(self, obj):
-    #     return mark_safe(f'<img src={obj.image.url} width="50" height="60"')
-    #
-    # get_image.short_description = "Изображение"
+    def get_image(self, obj):
+        return mark_safe(f'<img src={obj.image.url} width="50" height="60"')
+
+    get_image.short_description = "Изображение"
 
 
 @admin.register(Parameters)
