@@ -1,5 +1,7 @@
 from django.contrib import admin
-from .models import Product, Category, Brand, ImagesProduct
+from django.utils.safestring import mark_safe
+
+from .models import Product, Category, Brand, ImagesProduct, Parameters
 
 
 @admin.register(Category)
@@ -14,9 +16,14 @@ class BrandAdmin(admin.ModelAdmin):
     list_display_links = ("name",)
 
 
-class ImagesProductInline(admin.StackedInline):
+class ParametersInline(admin.TabularInline):
+     model = Parameters
+     extra = 0
+
+
+class ImagesProductInline(admin.TabularInline):
     model = ImagesProduct
-    extra = 1
+    extra = 0
 
 
 @admin.register(Product)
@@ -28,10 +35,10 @@ class ProductAdmin(admin.ModelAdmin):
     save_on_top = True
     save_as = True
     list_editable = ("publication",)
-    inlines = [ImagesProductInline]
+    inlines = [ParametersInline, ImagesProductInline]
     fieldsets = (
             (None, {
-                "fields": ("article",)
+                "fields": (("article", "publication"), )
             }),
             (None, {
                 "fields": (("name", "model_product", "brand",), )
@@ -43,24 +50,31 @@ class ProductAdmin(admin.ModelAdmin):
                 "fields": ("price",)
             }),
             (None, {
-                "fields": ("description_bf",)
-            }),
-            (None, {
-                "fields": ("poster",)
-            }),
-            (None, {
-                "fields": ("publication",)
+                "fields": ("description",)
             }),
     )
 
 
 @admin.register(ImagesProduct)
 class ImagesProductAdmin(admin.ModelAdmin):
-    list_display = ("id", "product", "title", "image")
+    list_display = ("id", "product", "name", "image")
     list_display_links = ("product",)
-    search_fields = ("product", "title")
+    search_fields = ("product__name", "name")
+    # readonly_fields = ("get_image",)
+
+    # def get_image(self, obj):
+    #     return mark_safe(f'<img src={obj.image.url} width="50" height="60"')
+    #
+    # get_image.short_description = "Изображение"
 
 
-# admin.site.register(ImagesProduct)
+@admin.register(Parameters)
+class ParametersAdmin(admin.ModelAdmin):
+    list_display = ("id", "product", "name", "values")
+    list_display_links = ("product",)
+    list_filter = ("product",)
+    search_fields = ("product__name",)
+
+
 admin.site.site_header = "Эталон"
-# admin.site.site_title = "Django Movies"
+admin.site.site_title = "Эталон"
