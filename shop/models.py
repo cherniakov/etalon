@@ -64,7 +64,7 @@ class ImagesProduct(models.Model):
     """Изображения товара"""
     product = models.ForeignKey(Product, verbose_name="Товар", on_delete=models.CASCADE)
     name = models.CharField("Имя", max_length=150)
-    image = models.ImageField("Изображение", upload_to="product_img/")
+    image = models.ImageField("Изображение", upload_to="shop/product_img/")
 
     def __str__(self):
         return self.name
