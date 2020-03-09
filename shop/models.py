@@ -32,9 +32,9 @@ class Product(models.Model):
     model_product = models.CharField("Модель/Серия", max_length=20, null=True, blank=True)
     brand = models.ForeignKey(Brand, verbose_name="Поизводитель", on_delete=models.SET_NULL, null=True)
     category = models.ForeignKey(Category, verbose_name="Категория", on_delete=models.SET_NULL, null=True)
-    description = models.TextField("Описание", max_length=500, null=True, blank=True)
+    description = models.TextField("Описание", null=True, blank=True)
     price = models.DecimalField("Цена", max_digits=12, decimal_places=2)
-    publication = models.BooleanField("Публиковать", default=False)
+    publication = models.BooleanField("Публиковать", default=True)
 
     def __str__(self):
         return self.name
@@ -72,3 +72,31 @@ class ImagesProduct(models.Model):
     class Meta:
         verbose_name = "Изображение"
         verbose_name_plural = "Изображения"
+
+
+class Order(models.Model):
+    """Заказ"""
+    name = models.CharField("Имя", max_length=20)
+    phone = models.CharField("Телефон", max_length=20)
+    comment = models.TextField("Комментарии", max_length=500, null=True, blank=True, default=None)
+    total_price = models.DecimalField("Сумма заказа", max_digits=12, decimal_places=2)
+
+    class Meta:
+        verbose_name = "Заказ"
+        verbose_name_plural = "Заказы"
+
+
+class ProductInOrder(models.Model):
+    """Список товаров в заказе"""
+    order = models.ForeignKey(Order, verbose_name="Заказ", on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, verbose_name="Товар", blank=True, on_delete=models.SET_NULL, null=True)
+    quantity = models.IntegerField("Количество", default=1)
+    price_product = models.DecimalField("Цена товара", max_digits=12, decimal_places=2)
+    total_product = models.DecimalField("Сумма товара", max_digits=12, decimal_places=2)
+
+    def __str__(self):
+        return self.product.name
+
+    class Meta:
+        verbose_name = "Товар в заказе"
+        verbose_name_plural = "Товары в заказе"

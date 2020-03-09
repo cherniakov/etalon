@@ -1,24 +1,17 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 
-from .models import Product, Category, Brand, ImagesProduct, Parameters
+from .models import Product, Category, Brand, ImagesProduct, Parameters, Order, ProductInOrder
 
 
-@admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
-    list_display = ("id", "name")
-    list_display_links = ("name",)
-
-
-@admin.register(Brand)
-class BrandAdmin(admin.ModelAdmin):
-    list_display = ("id", "name")
-    list_display_links = ("name",)
+class ProductInOrderInline(admin.TabularInline):
+    model = ProductInOrder
+    extra = 0
 
 
 class ParametersInline(admin.TabularInline):
-     model = Parameters
-     extra = 0
+    model = Parameters
+    extra = 0
 
 
 class ImagesProductInline(admin.TabularInline):
@@ -31,6 +24,18 @@ class ImagesProductInline(admin.TabularInline):
         return mark_safe(f'<img src={obj.image.url} width="80" height="60"')
 
     get_image.short_description = "Изображение"
+
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ("id", "name")
+    list_display_links = ("name",)
+
+
+@admin.register(Brand)
+class BrandAdmin(admin.ModelAdmin):
+    list_display = ("id", "name")
+    list_display_links = ("name",)
 
 
 @admin.register(Product)
@@ -81,6 +86,17 @@ class ParametersAdmin(admin.ModelAdmin):
     list_display_links = ("product",)
     list_filter = ("product",)
     search_fields = ("product__name",)
+
+
+@admin.register(ProductInOrder)
+class ProductInOrderAdmin(admin.ModelAdmin):
+    list_display = ("product", "quantity", "price_product")
+
+
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ("id", "name", "phone", "total_price")
+    inlines = [ProductInOrderInline]
 
 
 admin.site.site_header = "Эталон"
