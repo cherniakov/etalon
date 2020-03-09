@@ -80,6 +80,7 @@ class Order(models.Model):
     phone = models.CharField("Телефон", max_length=20)
     comment = models.TextField("Комментарии", max_length=500, null=True, blank=True, default=None)
     total_price = models.DecimalField("Сумма заказа", max_digits=12, decimal_places=2)
+    created = models.DateField("Дата", auto_now_add=True, auto_now=False)
 
     class Meta:
         verbose_name = "Заказ"
