@@ -97,6 +97,17 @@ class ProductInOrderAdmin(admin.ModelAdmin):
 class OrderAdmin(admin.ModelAdmin):
     list_display = ("id", "name", "phone", "total_price", "created")
     inlines = [ProductInOrderInline]
+    fieldsets = (
+            (None, {
+                "fields": (("name", "phone"), )
+            }),
+            (None, {
+                "fields": ("comment",)
+            }),
+            (None, {
+                "fields": ("total_price",)
+            }),
+    )
 
 
 admin.site.site_header = "Эталон"
